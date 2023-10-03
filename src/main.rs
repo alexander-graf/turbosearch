@@ -1,41 +1,39 @@
-use fltk::{app, button::Button, dialog::FileDialog, frame::Frame, input::Input, prelude::*, window::Window};
-use std::fs;
-use fltk::enums::FrameType;
+use fltk::{
+    app::App,
+    button::Button,
+    input::{Input, InputType},
+    prelude::{WidgetExt, GroupExt},
+    window::Window,
+};
 
 fn main() {
-    let app = app::App::default();
-    let mut window = Window::new(100, 100, 600, 400, "File Search GUI");
-    window.make_resizable(true);
+    let app = App::default();
+    let mut win = Window::default()
+        .with_size(600, 400)
+        .with_label("FLTK GUI");
 
-    let mut input = Input::new(10, 10, 300, 30, "");
-    let mut button = Button::new(320, 10, 100, 30, "Search");
-    let mut frame = Frame::new(10, 50, 580, 340, "");
-    frame.set_frame(FrameType::BorderFrame);
+    let mut input1 = Input::default()
+        .with_size(100, 40)
+        .with_pos(10, 10)
+        .with_label("Input 1");
 
-    button.set_callback(move |_| {
-        let search_string = input.value();
-        let found_files = search_files(search_string);
-        frame.set_label(&found_files.join("\n"));
-    });
+    let mut input2 = Input::default()
+        .with_size(100, 40)
+        .with_pos(10, 60)
+        .with_label("Input 2");
 
-    window.end();
-    window.show();
+    let mut button1 = Button::default()
+        .with_size(100, 30)
+        .with_pos(10, 120)
+        .with_label("Button 1");
+
+    let mut button2 = Button::default()
+        .with_size(100, 30)
+        .with_pos(10, 160)
+        .with_label("Button 2");
+
+    win.end();
+    win.show();
 
     app.run().unwrap();
-}
-
-fn search_files(search_string: &str) -> Vec<String> {
-    let current_dir = std::env::current_dir().unwrap();
-    let mut found_files = vec![];
-
-    for entry in fs::read_dir(current_dir).unwrap() {
-        if let Ok(entry) = entry {
-            let file_name = entry.file_name().into_string().unwrap();
-            if file_name.contains(search_string) {
-                found_files.push(file_name);
-            }
-        }
-    }
-
-    found_files
 }

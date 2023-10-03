@@ -8,4 +8,7 @@ edition = "2021"
 [dependencies]
 clipboard = "0.5.0"
 fltk = "1.3.8"
+glob = "0.3.1"
+regex = "1.9.6"
+walkdir = "2.4.0"
 
